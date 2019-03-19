@@ -15,6 +15,11 @@ protocol AddWeatherDelegate {
 
 class AddCityViewController: UIViewController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.prefersLargeTitles = true;
+    }
+    
     var delegate: AddWeatherDelegate?
     
     @IBOutlet weak var cityTextField: UITextField!

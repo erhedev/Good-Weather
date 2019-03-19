@@ -35,6 +35,17 @@ class WheatherListTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "AddCitySegue" {
+            
+            prepareSegueForAddCity(segue: segue)
+            
+        } else if segue.identifier == "SettingsSegue" {
+            prepareSegueForSettings(segue: segue)
+        }
+    }
+    
+    private func prepareSegueForAddCity(segue: UIStoryboardSegue) {
         guard let nav = segue.destination as? UINavigationController else {
             fatalError("Navigation not found")
         }
@@ -43,7 +54,18 @@ class WheatherListTableViewController: UITableViewController {
             fatalError("AddCityVC Not found")
         }
         addCityVC.delegate = self
+    }
+    
+    private func prepareSegueForSettings(segue: UIStoryboardSegue) {
         
+//        guard let nav = segue.destination as? UINavigationController else {
+//            fatalError("Navigation not found")
+//        }
+//
+//        guard let settingsVC = nav.viewControllers.first as? SettingsTableViewController else {
+//            fatalError("SettingsVC not found")
+//        }
+//        settingsVC.delegate = self
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,8 +74,7 @@ class WheatherListTableViewController: UITableViewController {
         
         let weatherVM = weatherListViewModel.modelAt(indexPath.row)
         
-        cell.cityNameLabel.text = weatherVM.name
-        cell.temperatureLabel.text = String(weatherVM.currentTemperature.temperature)
+        cell.configure(weatherVM)
         
         return cell
     }
