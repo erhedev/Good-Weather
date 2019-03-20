@@ -29,7 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setUpDefaultSettings() {
         
         let userDefaults = UserDefaults.standard
-        userDefaults.set(Unit.celsius.rawValue, forKey: "unit")
+        if userDefaults.value(forKey: "unit") == nil {
+            userDefaults.set(Unit.celsius.rawValue, forKey: "unit")
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

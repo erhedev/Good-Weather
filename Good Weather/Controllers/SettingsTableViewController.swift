@@ -9,10 +9,15 @@
 import Foundation
 import UIKit
 
+protocol SettingsDelegate {
+    func settingsDone(vm: SettingsViewModel)
+}
+
 
 class SettingsTableViewController: UITableViewController {
     
     private var settingsVm = SettingsViewModel()
+    var delegate: SettingsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,12 +26,26 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func done() {
+        
+        if let delegate = self.delegate {
+            delegate.settingsDone(vm: self.settingsVm)
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //uncheck all cells
+        tableView.visibleCells.forEach { cell in
+            cell.accessoryType = .none
+        }
+        
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = .checkmark
+            let unit = Unit.allCases[indexPath.row]
+            self.settingsVm.selectedUnit = unit
+            
         }
     }
     

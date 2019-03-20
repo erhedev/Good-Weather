@@ -26,6 +26,19 @@ extension Unit {
     }
 }
 
+extension Unit {
+    var displayNameLowercase: String {
+        get {
+            switch(self) {
+            case .celsius:
+                return "celsius"
+            case .fahrenheit:
+                return "fahrenheit"
+            }
+        }
+    }
+}
+
 struct SettingsViewModel {
     
     let units = Unit.allCases

@@ -42,7 +42,18 @@ class WheatherListTableViewController: UITableViewController {
             
         } else if segue.identifier == "SettingsSegue" {
             prepareSegueForSettings(segue: segue)
+        } else if segue.identifier == "WeatherDetailsSegue" {
+            prepareSegueForWeatherDetailsViewController(segue: segue)
         }
+    }
+    
+    private func  prepareSegueForWeatherDetailsViewController(segue: UIStoryboardSegue) {
+        guard let weatherDetailsVC = segue.destination as? WeatherDetailsViewController, let indexPath = self.tableView.indexPathForSelectedRow else {
+            fatalError("Details not found")
+        }
+        
+        let weatherVM = self.weatherListViewModel.modelAt(indexPath.row)
+        weatherDetailsVC.weatherViewModel = weatherVM
     }
     
     private func prepareSegueForAddCity(segue: UIStoryboardSegue) {
@@ -58,14 +69,14 @@ class WheatherListTableViewController: UITableViewController {
     
     private func prepareSegueForSettings(segue: UIStoryboardSegue) {
         
-//        guard let nav = segue.destination as? UINavigationController else {
-//            fatalError("Navigation not found")
-//        }
-//
-//        guard let settingsVC = nav.viewControllers.first as? SettingsTableViewController else {
-//            fatalError("SettingsVC not found")
-//        }
-//        settingsVC.delegate = self
+        guard let nav = segue.destination as? UINavigationController else {
+            fatalError("Navigation not found")
+        }
+
+        guard let settingsVC = nav.viewControllers.first as? SettingsTableViewController else {
+            fatalError("SettingsVC not found")
+        }
+        settingsVC.delegate = self
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,8 +97,15 @@ extension WheatherListTableViewController: AddWeatherDelegate {
         weatherListViewModel.addWeatherViewModel(vm)
         self.tableView.reloadData()
     }
-    
-    
+}
+
+extension WheatherListTableViewController: SettingsDelegate {
+    func settingsDone(vm: SettingsViewModel) {
+        print("done")
+
+        self.weatherListViewModel.updateUnit(to: vm.selectedUnit)
+        self.tableView.reloadData()
+    }
 }
 
 
